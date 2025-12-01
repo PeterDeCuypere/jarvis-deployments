@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standardized Residuals (PV - SP)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .chart-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #f1f5f9;
+        }
+        .stats {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+        canvas { max-height: 300px; }
+        .loading {
+            text-align: center;
+            padding: 100px;
+            font-size: 18px;
+            color: #64748b;
+        }
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Standardized Residuals (PV - SP) for CSTR Control Loops</h1>
+    <div id="loading" class="loading">Loading data...</div>
+    <div id="charts" class="grid" style="display:none;"></div>
+
+    <script>
+        const pairs = [
+            { pv: 'TT_101', sp: 'SP_TT_101', label: 'Temperature 101' },
+            { pv: 'TT_102', sp: 'SP_TT_102', label: 'Temperature 102' },
+            { pv: 'LT_101', sp: 'SP_LT_101', label: 'Level 101' },
+            { pv: 'LT_102', sp: 'SP_LT_102', label: 'Level 102' }
+        ];
+
+        function standardize(arr) {
+            const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+            const std = Math.sqrt(arr.reduce((sum, x) => sum + (x - mean) ** 2, 0) / arr.length);
+            return {
+                data: arr.map(x => (x - mean) / std),
+                mean,
+                std,
+                min: Math.min(...arr),
+                max: Math.max(...arr)
+            };
+        }
+
+        function createChart(container, timestamps, standardized, pair, stats) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chart-container';
+
+            const title = document.createElement('div');
+            title.className = 'chart-title';
+            title.textContent = pair.label;
+            wrapper.appendChild(title);
+
+            const canvas = document.createElement('canvas');
+            wrapper.appendChild(canvas);
+
+            const statsDiv = document.createElement('div');
+            statsDiv.className = 'stats';
+            statsDiv.innerHTML = `Mean: ${stats.mean.toFixed(4)} | Std: ${stats.std.toFixed(4)} | Range: [${stats.min.toFixed(4)}, ${stats.max.toFixed(4)}]`;
+            wrapper.appendChild(statsDiv);
+
+            container.appendChild(wrapper);
+
+            new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Standardized Residual',
+                        data: standardized,
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                        borderWidth: 1,
+                        pointRadius: 0,
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => `Time: ${items[0].label}`,
+                                label: (item) => `Residual: ${item.raw.toFixed(4)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: { display: true, text: 'Time', color: '#94a3b8' },
+                            ticks: { color: '#64748b', maxTicksLimit: 10 },
+                            grid: { color: '#334155' }
+                        },
+                        y: {
+                            display: true,
+                            title: { display: true, text: 'Std Residual', color: '#94a3b8' },
+                            ticks: { color: '#64748b' },
+                            grid: { color: '#334155' },
+                            min: -4,
+                            max: 4
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            zero: { type: 'line', yMin: 0, yMax: 0, borderColor: '#ef4444', borderDash: [5, 5] },
+                            upper2: { type: 'line', yMin: 2, yMax: 2, borderColor: '#f97316', borderDash: [3, 3] },
+                            lower2: { type: 'line', yMin: -2, yMax: -2, borderColor: '#f97316', borderDash: [3, 3] },
+                            upper3: { type: 'line', yMin: 3, yMax: 3, borderColor: '#ef4444', borderDash: [2, 2] },
+                            lower3: { type: 'line', yMin: -3, yMax: -3, borderColor: '#ef4444', borderDash: [2, 2] }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load and parse CSV
+        Papa.parse('cascaded_cstr.csv', {
+            download: true,
+            header: true,
+            dynamicTyping: true,
+            complete: function(results) {
+                document.getElementById('loading').style.display = 'none';
+                const container = document.getElementById('charts');
+                container.style.display = 'grid';
+
+                const data = results.data.filter(row => row.timestamp !== null && row.timestamp !== undefined);
+                const timestamps = data.map(row => row.timestamp);
+
+                pairs.forEach(pair => {
+                    const residuals = data.map(row => row[pair.pv] - row[pair.sp]);
+                    const { data: standardized, mean, std, min, max } = standardize(residuals);
+                    createChart(container, timestamps, standardized, pair, { mean, std, min, max });
+                });
+            },
+            error: function(error) {
+                document.getElementById('loading').textContent = 'Error loading CSV: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
