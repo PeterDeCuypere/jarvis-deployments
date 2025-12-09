@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 14%;
+    --card-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 25%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+.results-table {
+  @apply w-full border-collapse;
+}
+
+.results-table th,
+.results-table td {
+  @apply px-4 py-3 text-left border-b border-border;
+}
+
+.results-table th {
+  @apply bg-secondary font-semibold text-sm uppercase tracking-wider;
+}
+
+.results-table tbody tr:hover {
+  @apply bg-secondary/50;
+}
+
+input[type="range"] {
+  @apply w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-5 h-5 bg-primary rounded-full cursor-pointer shadow-lg;
+}
+
+input[type="range"]::-moz-range-thumb {
+  @apply w-5 h-5 bg-primary rounded-full cursor-pointer shadow-lg border-none;
+}
+
+.upload-zone {
+  @apply border-2 border-dashed border-border rounded-xl p-8 text-center cursor-pointer transition-all duration-200;
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+  @apply border-primary bg-primary/5;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
+.analyzing {
+  animation: pulse-glow 2s infinite;
+}
+
+.tab-button {
+  @apply px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200;
+}
+
+.tab-button.active {
+  @apply bg-primary text-primary-foreground;
+}
+
+.tab-button:not(.active) {
+  @apply text-muted-foreground hover:bg-secondary hover:text-foreground;
+}
+
+/* ====================================
+   HIGH PERFORMANCE HMI VALUE TICKER
+   ==================================== */
+
+.value-ticker {
+  @apply bg-secondary/80 border-b border-border overflow-hidden;
+  height: 36px;
+}
+
+.ticker-content {
+  @apply flex items-center gap-6 whitespace-nowrap h-full px-4;
+}
+
+.ticker-item {
+  @apply inline-flex items-center gap-2 text-sm;
+}
+
+.ticker-timestamp {
+  @apply text-muted-foreground font-mono text-xs;
+}
+
+.ticker-pair {
+  @apply gap-3;
+}
+
+.ticker-label {
+  @apply font-medium text-foreground;
+}
+
+.ticker-sp,
+.ticker-pv {
+  @apply text-muted-foreground font-mono text-xs px-2 py-0.5 rounded bg-background/50;
+}
+
+.ticker-output {
+  @apply gap-1;
+}
+
+.ticker-value {
+  @apply text-muted-foreground font-mono;
+}
+
+.ticker-separator {
+  @apply text-border mx-2;
+}
+
+/* ====================================
+   HIGH PERFORMANCE HMI COLOR SYSTEM
+   ====================================
+
+   PRINCIPLE: Colors convey meaning, not decoration
+   - Grey/neutral: Normal operating data
+   - Red: RESERVED for alarms/faults only
+   - Soft pastels: Informational overlays (modes)
+
+   ==================================== */
+
+:root {
+  /* Process Variable Colors - Neutral, calm tones */
+  --hphmi-sp-color: #94a3b8;      /* Slate-400 - Setpoints */
+  --hphmi-pv-color: #64748b;      /* Slate-500 - Process Values */
+  --hphmi-output-1: #78909c;      /* Blue-grey */
+  --hphmi-output-2: #607d8b;      /* Blue-grey darker */
+  --hphmi-output-3: #546e7a;      /* Blue-grey deeper */
+  --hphmi-output-4: #455a64;      /* Blue-grey deepest */
+
+  /* Mode Overlay Colors - Soft pastels for information, NOT attention */
+  --hphmi-mode-1: #a78bfa;        /* Soft purple */
+  --hphmi-mode-2: #67e8f9;        /* Soft cyan */
+  --hphmi-mode-3: #86efac;        /* Soft green */
+  --hphmi-mode-4: #fcd34d;        /* Soft amber */
+  --hphmi-mode-5: #c4b5fd;        /* Soft violet */
+  --hphmi-mode-6: #a5f3fc;        /* Soft sky */
+  --hphmi-mode-7: #bef264;        /* Soft lime */
+  --hphmi-mode-8: #fde68a;        /* Soft yellow */
+
+  /* Reserved - DO NOT USE for normal information */
+  --hphmi-alarm: #ef4444;         /* Red - ALARMS ONLY */
+  --hphmi-warning: #f59e0b;       /* Amber - WARNINGS ONLY */
+}
