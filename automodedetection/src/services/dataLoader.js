@@ -1,13 +1,36 @@
 import Papa from 'papaparse';
 
-const DATA_FILE_PATH = './data/cascaded_cstr_10modes_1_table.csv';
+// Use absolute path from base URL for reliable loading in production
+const DATA_FILE_NAME = 'data/cascaded_cstr_10modes_1_table.csv';
 
 export async function loadDataFile() {
   try {
-    const response = await fetch(DATA_FILE_PATH);
+    // Try multiple path strategies for different deployment scenarios
+    const pathsToTry = [
+      `${import.meta.env.BASE_URL || '/'}${DATA_FILE_NAME}`,
+      `./${DATA_FILE_NAME}`,
+      `/${DATA_FILE_NAME}`
+    ];
 
-    if (!response.ok) {
-      throw new Error(`Failed to load data file: ${response.status} ${response.statusText}`);
+    let response = null;
+    let lastError = null;
+
+    for (const path of pathsToTry) {
+      try {
+        console.log('Attempting to load data from:', path);
+        response = await fetch(path);
+        if (response.ok) {
+          console.log('Successfully loaded data from:', path);
+          break;
+        }
+      } catch (err) {
+        lastError = err;
+        console.warn('Failed to load from', path, err.message);
+      }
+    }
+
+    if (!response || !response.ok) {
+      throw lastError || new Error('Failed to load data file from any path');
     }
 
     const csvText = await response.text();
