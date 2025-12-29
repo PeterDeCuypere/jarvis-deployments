@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SureBeam Analytics - Optimization Opportunities</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hmi: {
+              bg: '#1a1a1a',
+              surface: '#242424',
+              border: '#333333',
+              text: '#e0e0e0',
+              muted: '#888888',
+              normal: '#5eadb4',
+              good: '#6db385',
+              warning: '#d4a84a',
+              alarm: '#ef4444',
+              accent: '#9b8ac4',
+              process: '#5cc4d6',
+              info: '#6b9ac4',
+              highlight: '#c4a86b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+  </style>
+</head>
+<body class="bg-hmi-bg text-hmi-text h-screen flex flex-col">
+  <!-- Navigation Bar (h-16 = 64px) -->
+  <header class="h-16 bg-black border-b border-hmi-border flex items-center justify-between px-4 flex-shrink-0">
+    <!-- Left: Facilis Logo + Navigation -->
+    <div class="flex items-center gap-6">
+      <img src="../WhiteTextIconBlackBackground.png" alt="Facilis" class="h-10 w-auto" onerror="this.outerHTML='<div class=\'text-white text-xl font-bold\'>facilis.ai</div>'">
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center">
+        <a href="overview.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-hmi-muted hover:text-hmi-text hover:bg-hmi-border/50 rounded-lg mx-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </a>
+        <a href="optimization.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-hmi-normal/20 text-hmi-normal rounded-lg mx-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          Optimization
+        </a>
+        <a href="data-explorer.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-hmi-muted hover:text-hmi-text hover:bg-hmi-border/50 rounded-lg mx-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Data Explorer
+        </a>
+      </nav>
+    </div>
+
+    <!-- Right: File info and SureBeam Logo -->
+    <div class="flex items-center gap-4">
+      <!-- File indicator -->
+      <div class="flex items-center gap-2 text-sm bg-hmi-bg rounded px-3 py-1.5 border border-hmi-border">
+        <svg class="w-4 h-4 text-hmi-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span class="text-hmi-text">SureTrack.db</span>
+      </div>
+
+      <!-- Close button -->
+      <button class="p-2 hover:bg-hmi-border rounded transition-colors" title="Close database">
+        <svg class="w-5 h-5 text-hmi-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Divider -->
+      <div class="h-8 w-px bg-hmi-border"></div>
+
+      <!-- SureBeam Logo -->
+      <div class="bg-black rounded p-1">
+        <img src="../surebeam-logo.jpg" alt="SureBeam" class="h-10 w-auto" style="filter: invert(1) hue-rotate(180deg)" onerror="this.outerHTML='<div class=\'text-white text-xl font-bold\'>SureBeam</div>'">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content (flex-1 overflow-auto) -->
+  <main class="flex-1 overflow-auto p-6">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Page Header -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-lg bg-hmi-highlight/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-hmi-highlight" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-hmi-text">Optimization Opportunities</h2>
+            <p class="text-hmi-muted">Data-driven insights to improve operational efficiency</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Matrix Summary -->
+      <div class="mb-8 bg-hmi-surface rounded-xl border border-hmi-border p-4">
+        <h3 class="font-semibold text-hmi-text mb-4 flex items-center gap-2">
+          <svg class="w-4 h-4 text-hmi-good" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          Priority Matrix - Data Availability Assessment
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-hmi-border">
+                <th class="text-left px-3 py-2 text-hmi-muted font-medium">Opportunity</th>
+                <th class="text-center px-3 py-2 text-hmi-muted font-medium">Impact</th>
+                <th class="text-center px-3 py-2 text-hmi-muted font-medium">Difficulty</th>
+                <th class="text-center px-3 py-2 text-hmi-muted font-medium">Data Status</th>
+                <th class="text-left px-3 py-2 text-hmi-muted font-medium">Key Tables</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Throughput & Capacity -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Throughput & Capacity Optimization</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-good bg-hmi-good/20">High</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-info bg-hmi-info/20 border-hmi-info/30">Partial</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">PCN, PCN_Lot, PCN_Lot_Processing</td>
+              </tr>
+              <!-- Dose Optimization -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Dose Optimization & Quality</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-good bg-hmi-good/20">High</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-muted bg-hmi-muted/20">Low</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-muted bg-hmi-muted/20 border-hmi-muted/30">Limited</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">SPSA, PCN_Lot_Processing, PCN</td>
+              </tr>
+              <!-- Customer & Product Mix -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Customer & Product Mix Optimization</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-muted bg-hmi-muted/20">Low</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-good bg-hmi-good/20 border-hmi-good/30">Ready</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">Customer, SPSA, PCN</td>
+              </tr>
+              <!-- Equipment Reliability -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Equipment Reliability & Predictive Maintenance</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-good bg-hmi-good/20">High</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-good bg-hmi-good/20">High</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-info bg-hmi-info/20 border-hmi-info/30">Partial</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">Device_Log, Beam_Device, Fault, Fault_Log</td>
+              </tr>
+              <!-- Process Parameter -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Process Parameter Optimization</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-info bg-hmi-info/20 border-hmi-info/30">Partial</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">PCN_Lot_Processing, SPSA, Process_Table</td>
+              </tr>
+              <!-- Energy Cost -->
+              <tr class="border-b border-hmi-border/30 hover:bg-hmi-border/20">
+                <td class="px-3 py-2 text-hmi-text">Energy Cost Reduction</td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium text-hmi-info bg-hmi-info/20">Medium</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="px-2 py-0.5 rounded text-xs font-medium border text-hmi-info bg-hmi-info/20 border-hmi-info/30">Partial</span>
+                </td>
+                <td class="px-3 py-2 text-hmi-muted text-xs">Device_Log, PCN_Lot_Processing, PCN</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-3 flex items-center gap-6 text-xs text-hmi-muted">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-hmi-good/20 text-hmi-good border border-hmi-good/30">High / Ready</span>
+            <span>Best outcome</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-hmi-info/20 text-hmi-info border border-hmi-info/30">Medium / Partial</span>
+            <span>Moderate</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-hmi-muted/20 text-hmi-muted border border-hmi-muted/30">Low / Limited</span>
+            <span>Needs attention</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunity Cards -->
+      <div class="space-y-4">
+
+        <!-- Throughput & Capacity Optimization -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Gauge icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Throughput & Capacity Optimization</h3>
+              <p class="text-sm text-hmi-muted mb-3">Maximize accelerator utilization and reduce changeover time between SPSA configurations.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">PCN Jobs: </span>
+                  <span class="text-sm font-medium text-hmi-text">34,032</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Years of Data: </span>
+                  <span class="text-sm font-medium text-hmi-text">14+</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Accelerators: </span>
+                  <span class="text-sm font-medium text-hmi-text">2 (Pit, Tower)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="throughput-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Dose Optimization & Quality -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Target icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Dose Optimization & Quality</h3>
+              <p class="text-sm text-hmi-muted mb-3">Tighten dose delivery to target ranges to reduce energy waste and improve throughput.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">SPSAs with Limits: </span>
+                  <span class="text-sm font-medium text-hmi-text">160</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Tight Margin SPSAs: </span>
+                  <span class="text-sm font-medium text-hmi-text">7 (&lt;5 kGy margin)</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Data Gap: </span>
+                  <span class="text-sm font-medium text-hmi-text">0 actual dose readings</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="dose-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Customer & Product Mix Optimization -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Users icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Customer & Product Mix Optimization</h3>
+              <p class="text-sm text-hmi-muted mb-3">Optimize scheduling based on customer volume and product similarity for batch processing.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Customers: </span>
+                  <span class="text-sm font-medium text-hmi-text">455</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Top Customer PCNs: </span>
+                  <span class="text-sm font-medium text-hmi-text">5,898 (SUPREME)</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Avg SPSA/Customer: </span>
+                  <span class="text-sm font-medium text-hmi-text">3.0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="customer-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Equipment Reliability & Predictive Maintenance -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Wrench icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Equipment Reliability & Predictive Maintenance</h3>
+              <p class="text-sm text-hmi-muted mb-3">Use device log data to predict maintenance needs and reduce unplanned downtime.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Device Readings: </span>
+                  <span class="text-sm font-medium text-hmi-text">6,643,054</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Fault Types: </span>
+                  <span class="text-sm font-medium text-hmi-text">Defined in Fault table</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Beam Devices: </span>
+                  <span class="text-sm font-medium text-hmi-text">2</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="maintenance-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Process Parameter Optimization -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Activity icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Process Parameter Optimization</h3>
+              <p class="text-sm text-hmi-muted mb-3">Analyze historical parameters to recommend optimal settings for products.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Processing Records: </span>
+                  <span class="text-sm font-medium text-hmi-text">58,772</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Speed Range: </span>
+                  <span class="text-sm font-medium text-hmi-text">0-10 (avg 17.4)</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">SPSAs: </span>
+                  <span class="text-sm font-medium text-hmi-text">1,379</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="parameters-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Energy Cost Reduction -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-lg bg-hmi-info/20 flex items-center justify-center flex-shrink-0">
+              <!-- Dollar sign icon -->
+              <svg class="w-6 h-6 text-hmi-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-hmi-text mb-1">Energy Cost Reduction</h3>
+              <p class="text-sm text-hmi-muted mb-3">Optimize energy consumption by analyzing power usage patterns.</p>
+
+              <!-- Key Metrics Row -->
+              <div class="flex items-center gap-4">
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Device Log Entries: </span>
+                  <span class="text-sm font-medium text-hmi-text">6,643,054</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Operating Years: </span>
+                  <span class="text-sm font-medium text-hmi-text">14+</span>
+                </div>
+                <div class="bg-hmi-bg/50 rounded px-3 py-1.5 border border-hmi-border">
+                  <span class="text-xs text-hmi-muted">Power Data: </span>
+                  <span class="text-sm font-medium text-hmi-text">RF/Current only</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="energy-optimization.html" class="px-4 py-2 bg-hmi-info hover:bg-hmi-info/80 rounded-lg text-sm font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0">
+              View Analysis
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</body>
+</html>
