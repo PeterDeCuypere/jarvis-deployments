@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SureBeam Analytics - Overview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hmi: {
+              bg: '#1a1a1a',
+              surface: '#242424',
+              border: '#333333',
+              text: '#e0e0e0',
+              muted: '#888888',
+              normal: '#5eadb4',
+              good: '#6db385',
+              warning: '#d4a84a',
+              alarm: '#ef4444',
+              accent: '#9b8ac4',
+              process: '#5cc4d6',
+              info: '#6b9ac4',
+              highlight: '#c4a86b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+  </style>
+</head>
+<body>
+  <div class="h-screen flex flex-col bg-hmi-bg">
+    <!-- Navigation Bar -->
+    <header class="h-16 bg-black border-b border-hmi-border flex items-center justify-between px-4">
+      <!-- Left: Facilis Logo -->
+      <div class="flex items-center gap-6">
+        <img src="../WhiteTextIconBlackBackground.png" alt="Facilis" class="h-10 w-auto" onerror="this.outerHTML='<div class=\'text-white text-xl font-bold\'>facilis.ai</div>'">
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center">
+          <a href="overview.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg mx-1 bg-hmi-normal/20 text-hmi-normal">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+            </svg>
+            Overview
+          </a>
+          <a href="optimization.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg mx-1 text-hmi-muted hover:text-hmi-text hover:bg-hmi-border/50">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            Optimization
+          </a>
+          <a href="data-explorer.html" class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg mx-1 text-hmi-muted hover:text-hmi-text hover:bg-hmi-border/50">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Data Explorer
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right: File info and SureBeam Logo -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 text-sm bg-hmi-bg rounded px-3 py-1.5 border border-hmi-border">
+          <svg class="w-4 h-4 text-hmi-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-hmi-text">SureTrack.db</span>
+        </div>
+        <button class="p-2 hover:bg-hmi-border rounded">
+          <svg class="w-5 h-5 text-hmi-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div class="h-8 w-px bg-hmi-border"></div>
+        <div class="bg-black rounded p-1">
+          <img src="../surebeam-logo.jpg" alt="SureBeam" class="h-10 w-auto" style="filter: invert(1) hue-rotate(180deg)" onerror="this.outerHTML='<div class=\'text-white text-xl font-bold\'>SureBeam</div>'">
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto p-6">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- System Overview -->
+        <div class="mb-8 bg-gradient-to-br from-hmi-surface to-hmi-bg rounded-xl border border-hmi-border p-6">
+          <div class="flex items-start justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-hmi-text mb-2">SureBeam Middle East</h2>
+              <p class="text-hmi-muted max-w-2xl">
+                Industrial e-beam (electron beam) irradiation processing facility. This database tracks the processing
+                of products through two Linear Accelerators (Pit and Tower) for sterilization and irradiation -
+                primarily food products (dates, chicken, biscuits) and medical supplies.
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold text-slate-200">6.8M</div>
+              <div class="text-sm text-hmi-muted">Total Records</div>
+            </div>
+          </div>
+
+          <!-- Key Stats Row -->
+          <div class="grid grid-cols-5 gap-4 mt-6">
+            <div class="bg-hmi-bg/50 rounded-lg p-4 border border-hmi-border">
+              <div class="flex items-center gap-2 text-hmi-muted text-xs mb-1">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Operating Since
+              </div>
+              <div class="text-xl font-bold text-hmi-text">2011</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-4 border border-hmi-border">
+              <div class="flex items-center gap-2 text-hmi-muted text-xs mb-1">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                Years of Data
+              </div>
+              <div class="text-xl font-bold text-hmi-text">15+</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-4 border border-hmi-border">
+              <div class="flex items-center gap-2 text-hmi-muted text-xs mb-1">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Device Readings
+              </div>
+              <div class="text-xl font-bold text-hmi-text">6.6M</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-4 border border-hmi-border">
+              <div class="flex items-center gap-2 text-hmi-muted text-xs mb-1">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Accelerators
+              </div>
+              <div class="text-xl font-bold text-hmi-text">2</div>
+              <div class="text-xs text-hmi-muted">Pit & Tower</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-4 border border-hmi-border">
+              <div class="flex items-center gap-2 text-hmi-muted text-xs mb-1">
+                <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Database Tables
+              </div>
+              <div class="text-xl font-bold text-hmi-text">18</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Flow Diagram -->
+        <div class="mb-8 bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+          <div class="p-4 border-b border-hmi-border">
+            <h2 class="font-semibold text-hmi-text flex items-center gap-2">
+              <svg class="w-4 h-4 text-hmi-info" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              Core Business Flow
+            </h2>
+            <p class="text-xs text-hmi-muted mt-1">How data flows through the SureBeam processing system</p>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between">
+              <!-- Customers -->
+              <div class="text-center">
+                <div class="w-16 h-16 rounded-xl bg-hmi-info flex items-center justify-center mx-auto mb-2 shadow-lg">
+                  <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-hmi-text">Customers</div>
+                <div class="text-lg font-bold text-slate-200">455</div>
+              </div>
+              <div class="mx-4 flex items-center">
+                <div class="w-12 h-0.5 bg-gradient-to-r from-hmi-border to-hmi-muted"></div>
+                <svg class="w-5 h-5 text-hmi-muted -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              <!-- SPSA Configs -->
+              <div class="text-center">
+                <div class="w-16 h-16 rounded-xl bg-hmi-accent flex items-center justify-center mx-auto mb-2 shadow-lg">
+                  <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-hmi-text">SPSA Configs</div>
+                <div class="text-lg font-bold text-slate-200">1,379</div>
+              </div>
+              <div class="mx-4 flex items-center">
+                <div class="w-12 h-0.5 bg-gradient-to-r from-hmi-border to-hmi-muted"></div>
+                <svg class="w-5 h-5 text-hmi-muted -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              <!-- PCN Jobs -->
+              <div class="text-center">
+                <div class="w-16 h-16 rounded-xl bg-hmi-normal flex items-center justify-center mx-auto mb-2 shadow-lg">
+                  <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-hmi-text">PCN Jobs</div>
+                <div class="text-lg font-bold text-slate-200">34,032</div>
+              </div>
+              <div class="mx-4 flex items-center">
+                <div class="w-12 h-0.5 bg-gradient-to-r from-hmi-border to-hmi-muted"></div>
+                <svg class="w-5 h-5 text-hmi-muted -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              <!-- PCN Lots -->
+              <div class="text-center">
+                <div class="w-16 h-16 rounded-xl bg-hmi-process flex items-center justify-center mx-auto mb-2 shadow-lg">
+                  <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-hmi-text">PCN Lots</div>
+                <div class="text-lg font-bold text-slate-200">34,034</div>
+              </div>
+              <div class="mx-4 flex items-center">
+                <div class="w-12 h-0.5 bg-gradient-to-r from-hmi-border to-hmi-muted"></div>
+                <svg class="w-5 h-5 text-hmi-muted -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              <!-- Processing Records -->
+              <div class="text-center">
+                <div class="w-16 h-16 rounded-xl bg-hmi-good flex items-center justify-center mx-auto mb-2 shadow-lg">
+                  <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-hmi-text">Processing Records</div>
+                <div class="text-lg font-bold text-slate-200">58,772</div>
+              </div>
+            </div>
+
+            <!-- Flow Description -->
+            <div class="mt-6 pt-4 border-t border-hmi-border grid grid-cols-5 gap-4 text-xs text-hmi-muted">
+              <div>Each customer has multiple product configurations (SPSAs)</div>
+              <div>SPSA defines dose limits, load dimensions, dosimeter settings</div>
+              <div>PCN tracks individual processing jobs with dates, cartons, carriers</div>
+              <div>Each PCN contains one or more lots for tracking</div>
+              <div>Per-lot device parameters: speeds, beam currents, doses</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 mb-8">
+          <!-- Processing by Year Chart -->
+          <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+            <div class="p-4 border-b border-hmi-border">
+              <h2 class="font-semibold text-hmi-text flex items-center gap-2">
+                <svg class="w-4 h-4 text-hmi-process" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                Annual PCN Processing Volume Trend
+              </h2>
+              <p class="text-xs text-hmi-muted mt-1">&nbsp;</p>
+            </div>
+            <div class="p-4 max-h-64 overflow-y-auto">
+              <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2011</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 8%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">312</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2012</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 32%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">1,245</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2013</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 48%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">1,892</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2014</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 62%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">2,456</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2015</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 70%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">2,789</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2016</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 78%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,102</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2017</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 82%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,267</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2018</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 88%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,512</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2019</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 95%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,789</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2020</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 72%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">2,867</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2021</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 85%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,389</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2022</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 92%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,678</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2023</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 100%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,987</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2024</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process rounded" style="width: 98%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,912</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 text-xs text-hmi-muted text-right font-mono">2025</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-process/70 rounded" style="width: 68%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">3,712*</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Customers Chart -->
+          <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden">
+            <div class="p-4 border-b border-hmi-border">
+              <h2 class="font-semibold text-hmi-text flex items-center gap-2">
+                <svg class="w-4 h-4 text-hmi-info" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Top Customers by PCN Count
+              </h2>
+              <p class="text-xs text-hmi-muted mt-1">&nbsp;</p>
+            </div>
+            <div class="p-4 max-h-64 overflow-y-auto">
+              <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="SUPREME Foods">SUPREME Foods</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 100%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">5,898</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Nakheel Al Watan">Nakheel Al Watan</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 41%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">2,426</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="UNIMED Healthcare">UNIMED Healthcare</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 23%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">1,366</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Al Marai Dairy">Al Marai Dairy</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 20%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">1,189</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Sadafco Industries">Sadafco Industries</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 18%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">1,067</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Arabian Medical">Arabian Medical</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 16%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">956</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Gulf Dates Company">Gulf Dates Company</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 14%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">845</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Tanmiah Food">Tanmiah Food</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 13%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">789</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Almarai Poultry">Almarai Poultry</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 12%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">723</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Riyadh Biscuit">Riyadh Biscuit</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 11%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">678</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="National Dates Co">National Dates Co</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 10%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">612</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Al Watania Poultry">Al Watania Poultry</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 9%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">567</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Americana Foods">Americana Foods</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 8%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">512</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Al Rabie Saudi">Al Rabie Saudi</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 7%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">456</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-32 text-xs text-hmi-muted truncate" title="Al Safi Danone">Al Safi Danone</div>
+                  <div class="flex-1 h-5 bg-hmi-border/30 rounded overflow-hidden">
+                    <div class="h-full bg-hmi-info rounded" style="width: 6%"></div>
+                  </div>
+                  <div class="w-16 text-xs text-hmi-text text-right">389</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tables Overview -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden mb-8">
+          <div class="p-4 border-b border-hmi-border">
+            <h2 class="font-semibold text-hmi-text flex items-center gap-2">
+              <svg class="w-4 h-4 text-hmi-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Database Tables
+            </h2>
+          </div>
+          <div class="max-h-80 overflow-y-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-hmi-bg sticky top-0">
+                <tr>
+                  <th class="text-left px-4 py-2 text-hmi-muted font-medium">Table</th>
+                  <th class="text-right px-4 py-2 text-hmi-muted font-medium">Rows</th>
+                  <th class="text-right px-4 py-2 text-hmi-muted font-medium">Columns</th>
+                  <th class="text-left px-4 py-2 text-hmi-muted font-medium">Primary Key</th>
+                  <th class="text-left px-4 py-2 text-hmi-muted font-medium">Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">Device_Log</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">6.6M</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">8</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-process/20 text-hmi-process">Monitoring</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">PCN_Lot_Processing</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">58.7K</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">32</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">PCN_Lot_Processing_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-normal/20 text-hmi-normal">Core Processing</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">PCN_Lot</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">34K</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">12</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">PCN_Lot_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-normal/20 text-hmi-normal">Core Processing</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">PCN</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">34K</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">28</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">PCN_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-normal/20 text-hmi-normal">Core Processing</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">SPSA</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">1.4K</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">45</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">SPSA_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-accent/20 text-hmi-accent">Configuration</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">Customer</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">455</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">15</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">Customer_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-accent/20 text-hmi-accent">Configuration</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">Beam_Device</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">2</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">8</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">Beam_Device_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-info/20 text-hmi-info">Equipment</span></td>
+                </tr>
+                <tr class="hover:bg-hmi-border/30 border-b border-hmi-border/30">
+                  <td class="px-4 py-2 text-hmi-text font-medium">Fault</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">156</td>
+                  <td class="px-4 py-2 text-right text-hmi-muted">6</td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 bg-hmi-muted/20 text-hmi-muted rounded">Fault_ID</span></td>
+                  <td class="px-4 py-2"><span class="text-xs px-2 py-0.5 rounded bg-hmi-info/20 text-hmi-info">Equipment</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Domain Terms -->
+        <div class="bg-hmi-surface rounded-xl border border-hmi-border overflow-hidden mb-8">
+          <div class="p-4 border-b border-hmi-border">
+            <h2 class="font-semibold text-hmi-text flex items-center gap-2">
+              <svg class="w-4 h-4 text-hmi-process" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              E-Beam Processing Terminology
+            </h2>
+          </div>
+          <div class="p-4 grid grid-cols-3 gap-4">
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">PCN</div>
+              <div class="text-xs text-hmi-muted mt-1">Process Control Number - unique identifier for each processing job</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">SPSA</div>
+              <div class="text-xs text-hmi-muted mt-1">Sterilization Process Setup Agreement - product configuration defining dose limits</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">kGy</div>
+              <div class="text-xs text-hmi-muted mt-1">kiloGray - unit of absorbed radiation dose</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">MeV</div>
+              <div class="text-xs text-hmi-muted mt-1">Mega electron Volt - beam energy measurement</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">LINAC</div>
+              <div class="text-xs text-hmi-muted mt-1">Linear Accelerator - the electron beam source</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">Dosimeter</div>
+              <div class="text-xs text-hmi-muted mt-1">Device to measure absorbed radiation dose</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">Beam Current</div>
+              <div class="text-xs text-hmi-muted mt-1">Electron flow rate in milliamps (mA)</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">Conveyor Speed</div>
+              <div class="text-xs text-hmi-muted mt-1">Product movement speed through beam (m/min)</div>
+            </div>
+            <div class="bg-hmi-bg/50 rounded-lg p-3 border border-hmi-border">
+              <div class="font-mono font-bold text-hmi-process text-sm">SAL</div>
+              <div class="text-xs text-hmi-muted mt-1">Sterility Assurance Level - probability of non-sterile unit</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
