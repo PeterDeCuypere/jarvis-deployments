@@ -1,44 +1,129 @@
 import Papa from 'papaparse';
 
-// Use absolute path from base URL for reliable loading in production
-const DATA_FILE_NAME = 'data/cascaded_cstr_10modes_1_table.csv';
+// Use absolute path for reliable loading in production
+const DATA_FILE_NAME = 'cascaded_cstr_10modes_1_table.csv';
 
 export async function loadDataFile() {
-  try {
-    // Try multiple path strategies for different deployment scenarios
-    const pathsToTry = [
-      `${import.meta.env.BASE_URL || '/'}${DATA_FILE_NAME}`,
-      `./${DATA_FILE_NAME}`,
-      `/${DATA_FILE_NAME}`
-    ];
+  // Build paths to try - use absolute path first (most reliable for deployed apps)
+  const pathsToTry = [
+    `/data/${DATA_FILE_NAME}`,      // Absolute path (works in most deployments)
+    `./data/${DATA_FILE_NAME}`,     // Relative from current location
+    `data/${DATA_FILE_NAME}`        // Simple relative
+  ];
 
-    let response = null;
-    let lastError = null;
+  let response = null;
+  let lastError = null;
+  let successPath = null;
 
-    for (const path of pathsToTry) {
-      try {
-        console.log('Attempting to load data from:', path);
-        response = await fetch(path);
-        if (response.ok) {
-          console.log('Successfully loaded data from:', path);
-          break;
-        }
-      } catch (err) {
-        lastError = err;
-        console.warn('Failed to load from', path, err.message);
+  for (const path of pathsToTry) {
+    try {
+      console.log('[DataLoader] Attempting to load data from:', path);
+      response = await fetch(path);
+
+      // Log all response headers for debugging
+      console.log('[DataLoader] Response status:', response.status);
+      console.log('[DataLoader] Response headers:');
+      response.headers.forEach((value, key) => {
+        console.log(`  ${key}: ${value}`);
+      });
+
+      if (response.ok) {
+        successPath = path;
+        console.log('[DataLoader] Successfully fetched from:', path);
+        break;
+      } else {
+        console.warn('[DataLoader] HTTP error from', path, '- Status:', response.status);
+        lastError = new Error(`HTTP ${response.status} from ${path}`);
       }
+    } catch (err) {
+      console.warn('[DataLoader] Network error from', path, '-', err.message);
+      lastError = err;
     }
-
-    if (!response || !response.ok) {
-      throw lastError || new Error('Failed to load data file from any path');
-    }
-
-    const csvText = await response.text();
-    return parseCSV(csvText);
-  } catch (error) {
-    console.error('Error loading data file:', error);
-    throw error;
   }
+
+  if (!response || !response.ok) {
+    const errorMsg = `Failed to load data file. Last error: ${lastError?.message || 'Unknown'}`;
+    console.error('[DataLoader]', errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  // Get the CSV text
+  let csvText = await response.text();
+  console.log('[DataLoader] Received', csvText.length, 'bytes from', successPath);
+
+  // Check content type header
+  const contentType = response.headers.get('content-type');
+  console.log('[DataLoader] Content-Type header:', contentType);
+
+  // Validate we got actual CSV content
+  if (!csvText || csvText.length < 100) {
+    throw new Error('Data file appears to be empty or invalid');
+  }
+
+  // Check if we got HTML instead of CSV (common error page issue)
+  const trimmedText = csvText.trim();
+  if (trimmedText.startsWith('<!') || trimmedText.startsWith('<html') || trimmedText.startsWith('<HTML')) {
+    console.error('[DataLoader] Received HTML instead of CSV. First 1000 chars:', csvText.substring(0, 1000));
+    throw new Error('Server returned HTML error page instead of CSV data');
+  }
+
+  // CRITICAL: Check for and remove preview truncation header
+  // Some upload tools add lines like:
+  //   "⚠️ File truncated for preview (showing first 0.5MB of 5.5MB)"
+  //   "────────────────────────────────────────────────────────────"
+  // before the actual CSV content
+  const lines = csvText.split('\n');
+  let headerLineIndex = 0;
+
+  // Find the actual CSV header line (first line with multiple commas that looks like column names)
+  for (let i = 0; i < Math.min(lines.length, 10); i++) {
+    const line = lines[i].trim();
+    const commaCount = (line.match(/,/g) || []).length;
+
+    // A valid CSV header should have multiple commas and start with a letter or underscore
+    // Also check it's not a separator line (────) or warning message
+    const startsWithValidChar = /^[a-zA-Z_"]/.test(line);
+    const isNotSeparator = !line.startsWith('─') && !line.startsWith('-');
+    const isNotWarning = !line.includes('truncated') && !line.includes('preview');
+
+    console.log(`[DataLoader] Line ${i}: commas=${commaCount}, valid=${startsWithValidChar}, notSep=${isNotSeparator}, notWarn=${isNotWarning}, content="${line.substring(0, 50)}..."`);
+
+    if (commaCount >= 5 && startsWithValidChar && isNotSeparator && isNotWarning) {
+      headerLineIndex = i;
+      console.log(`[DataLoader] Found CSV header at line ${i}`);
+      break;
+    }
+  }
+
+  // If we found a header that's not on the first line, strip the prefix lines
+  if (headerLineIndex > 0) {
+    console.log(`[DataLoader] Stripping ${headerLineIndex} non-CSV prefix lines`);
+    const cleanedLines = lines.slice(headerLineIndex);
+    csvText = cleanedLines.join('\n');
+    console.log('[DataLoader] Cleaned CSV length:', csvText.length, 'bytes');
+  }
+
+  // Re-split after potential cleaning
+  const cleanLines = csvText.split('\n');
+  const firstLine = cleanLines[0] || '';
+  const trimmedFirstLine = firstLine.trim();
+
+  console.log('[DataLoader] Number of lines after cleaning:', cleanLines.length);
+  console.log('[DataLoader] Header line:', trimmedFirstLine.substring(0, 150) + '...');
+  console.log('[DataLoader] Header comma count:', (trimmedFirstLine.match(/,/g) || []).length);
+
+  // Validate it's now proper CSV
+  const hasCommas = trimmedFirstLine.includes(',');
+  const hasMultipleLines = cleanLines.length > 1;
+
+  if (!hasCommas) {
+    console.error('[DataLoader] Header line does not contain commas:', trimmedFirstLine);
+    throw new Error('Data file does not appear to be valid CSV format');
+  }
+
+  console.log('[DataLoader] CSV validation passed, parsing...');
+
+  return parseCSV(csvText);
 }
 
 function parseCSV(csvText) {

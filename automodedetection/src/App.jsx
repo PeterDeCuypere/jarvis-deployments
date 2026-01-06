@@ -87,20 +87,31 @@ function AppContent() {
   useEffect(() => {
     async function initializeApp() {
       try {
+        console.log('[App] Starting initialization...');
         setLoading(true, 'Loading data file...');
 
-        const { data, columns } = await loadDataFile();
+        const result = await loadDataFile();
+        console.log('[App] Data loaded, rows:', result?.data?.length, 'columns:', result?.columns?.length);
+
+        if (!result || !result.data || result.data.length === 0) {
+          throw new Error('No data returned from file loader');
+        }
+
+        const { data, columns } = result;
 
         setLoading(true, 'Discovering columns...');
         setColumns(columns);
+        console.log('[App] Columns set:', columns.length);
 
         const { spPvPairs: pairs, outputVariables: outputs } = discoverColumns(columns);
+        console.log('[App] Discovered SP/PV pairs:', pairs.length, 'output vars:', outputs.length);
+
         setSpPvPairs(pairs);
         setOutputVariables(outputs);
-
         setData(data);
+        console.log('[App] Initialization complete, data set');
       } catch (err) {
-        console.error('Initialization error:', err);
+        console.error('[App] Initialization error:', err);
         setError(err.message || 'Failed to load data');
       }
     }
